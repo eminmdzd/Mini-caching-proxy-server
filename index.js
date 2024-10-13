@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 const express = require("express");
-const https = require("https");
 const app = express();
 
 const parseCommandLineArgs = require("./cli");
@@ -40,19 +39,11 @@ app.use(async (req, res) => {
     try {
       const response = await fetch(`${origin}${cacheKey}`, {
         method: "GET",
-        headers: { ...req.headers },
+        headers: { ...req.headers, host: new URL(origin).hostname },
       });
 
-      const contentType = response.headers.get("content-type");
-      let data;
-
-      if (contentType && contentType.includes("application/json")) {
-        // Handle JSON response
-        data = JSON.stringify(await response.json());
-      } else {
-        // Handle text-based responses (e.g., HTML, plain text)
-        data = await response.text();
-      }
+      const contentType = await response.headers.get("content-type");
+      const data = await response.text();
 
       // Cache the response with timestamp and content type
       cache.setKey(cacheKey, {
