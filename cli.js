@@ -8,7 +8,7 @@ function parseCommandLineArgs() {
     .name("caching-proxy")
     .description("Start a caching proxy server")
     .option("--port <number>", "Port to run the proxy server on", "3000")
-    .option("--origin <url>", "Origin server URL", "http://dummyjson.com");
+    .option("--origin <url>", "Origin server URL", "https://dummyjson.com");
 
   program.parse(process.argv);
 

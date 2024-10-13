@@ -14,4 +14,10 @@ function createCache(cacheId = "responsesCache") {
   return cache;
 }
 
-module.exports = createCache;
+function isCacheExpired(cacheItem, ttl = cacheOptions.ttl) {
+  if (!cacheItem || !cacheItem.timestamp) return true;
+  const age = Date.now() - cacheItem.timestamp;
+  return age > ttl;
+}
+
+module.exports = { createCache, isCacheExpired };
